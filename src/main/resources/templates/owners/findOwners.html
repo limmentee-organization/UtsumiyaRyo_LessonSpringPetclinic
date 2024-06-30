@@ -4,7 +4,7 @@
 <body>
 
   <h2>Find Owners</h2>
-
+<!-- th:object="${owner}": フォームにバインドされるオブジェクトをownerに指定-->
   <form th:object="${owner}" th:action="@{/owners}" method="get"
     class="form-horizontal" id="search-owner-form">
     <div class="form-group">
