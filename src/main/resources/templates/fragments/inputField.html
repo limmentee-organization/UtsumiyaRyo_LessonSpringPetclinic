@@ -1,0 +1,36 @@
+<html>
+<body>
+	<form>
+		<!-- th:blockタグはThymeleafのタグで、単にグループ化の目的で使用される -->
+		<!--　th:fragmentはカスタムフラグメントでinputという名で、label,name,typeという３つのパラメータを受け取る　-->
+		<th:block th:fragment="input (label, name, type)">
+			<!-- th:with属性は新しい変数を導入するために使用される。この場合はvalidという変数が導入されている。フィールドにエラーがない場合にtrueを返し、エラーがある場合にfalseを返す -->
+			<!-- th:classは、form-groupに加えフィールドにエラーがある場合にhas-errorクラスを追加する -->
+			<div th:with="valid=${!#fields.hasErrors(name)}"
+				th:class="${'form-group' + (valid ? '' : ' has-error')}"
+				class="form-group">
+				<label class="col-sm-2 control-label" th:text="${label}">Label</label>
+				<div class="col-sm-10">
+					<!-- th:switchはthymeleafの条件th:if="${valid}"分岐に使用され、この場合、typeの値に応じてレンダリングする -->
+					<!-- th:case="'text'"はtypeがtextの場合にこのフィールドを表示する。 -->
+					<!-- th:field="*{__${name}__}"は入力フィールドの名前とバインディングを設定する。nameはフラグメントで渡されたパラメータを代入している -->
+					<div th:switch="${type}">
+						<input th:case="'text'" class="form-control" type="text"
+							th:field="*{__${name}__}" /> <input th:case="'date'"
+							class="form-control" type="date" th:field="*{__${name}__}" />
+					</div>
+					<!-- <span th:if="${valid}"はフィールドが有効である場合にチェックマークアイコンを表示する -->
+					<span th:if="${valid}" class="fa fa-ok form-control-feedback"
+						aria-hidden="true"></span>
+					<!-- <th:block th:if="${!valid}">はフィールドが無効の場合にエラーメッセージとエラーアイコンを表示する -->
+					<th:block th:if="${!valid}">
+						<span class="fa fa-remove form-control-feedback"
+							aria-hidden="true"></span>
+						<span class="help-inline" th:errors="*{__${name}__}">Error</span>
+					</th:block>
+				</div>
+			</div>
+		</th:block>
+	</form>
+</body>
+</html>

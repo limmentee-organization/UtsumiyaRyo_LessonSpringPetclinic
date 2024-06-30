@@ -1,0 +1,32 @@
+<html>
+<body>
+	<form>
+		<!-- th:block:Thymeleafの特別タグで、テンプレート内で何も出力しないブロックを生成する -->
+		<!-- th:fragment="select (label, name, items)":このブロックをフラグメントとして定義して呼び出し時に、 label、name、itemsという3つの引数を取得する-->
+		<th:block th:fragment="select (label, name, items)">
+			<!-- th:with="valid=${!#fields.hasErrors(name)}"： th:with属性を使ってvalidの変数を定義する-->
+			<!-- #fields.hasErrors(name)は指定されたフィールドnameに対してエラーチェックをしてエラー無い場合にtrueを返す -->
+			<!-- th:class="${'form-group' + (valid ? '' : ' has-error')}"：CSSを動的に設定。 validがtrueの場合はform-group、falseの場合はform-group has-errorとなる-->
+			<div th:with="valid=${!#fields.hasErrors(name)}"
+				th:class="${'form-group' + (valid ? '' : ' has-error')}"
+				class="form-group">
+				<label class="col-sm-2 control-label" th:text="${label}">Label</label>
+				<!-- th:field="*{__${name}__}"： th:field属性を使って、フォームバインディングを設定する。name変数をフィールド名として使用する。-->
+				<!-- <option th:each="item : ${items}" th:value="${item}" th:text="${item}">dog</option>： セレクトボックスの各オプションを動的に生成。itemsリストをループして、各itemをオプションとして追加する。-->
+				<div class="col-sm-10">
+					<select th:field="*{__${name}__}">
+						<option th:each="item : ${items}" th:value="${item}"
+							th:text="${item}">dog</option>
+					</select> <span th:if="${valid}" class="fa fa-ok form-control-feedback"
+						aria-hidden="true"></span>
+					<th:block th:if="${!valid}">
+						<span class="fa fa-remove form-control-feedback"
+							aria-hidden="true"></span>
+						<span class="help-inline" th:errors="*{__${name}__}">Error</span>
+					</th:block>
+				</div>
+			</div>
+		</th:block>
+	</form>
+</body>
+</html>
